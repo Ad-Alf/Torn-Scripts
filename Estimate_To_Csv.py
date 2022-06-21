@@ -59,10 +59,9 @@ def getMemberInfo(id, key):
     name = memberInfo['name']
     level = memberInfo['level']
     rankSplit = memberInfo['rank'].split(' ')
-    if len(rankSplit) > 2:
-            rankString = rankSplit[0] + ' ' + rankSplit[1]
-    else:
-        rankString = rankSplit[0]
+    rankString = rankSplit[0]
+    if rankSplit[1].islower():
+        rankString = rankString + ' ' + rankSplit[1]
     rank = ranks[rankString]
     crimes = memberInfo['criminalrecord']['total']
     networth = memberInfo['personalstats']['networth']
@@ -90,8 +89,9 @@ def getMemberInfo(id, key):
             trNetworth +=1
    
     statLevel = rank - trLevel - trCrimes - trNetworth - 1
-    estimate = estimatedStats[statLevel]
-    if not estimate:
+    try:
+        estimate = estimatedStats[statLevel]
+    except IndexError:
         estimate = 'N/A'
     fileWriter(factionName, f'{name}, {level}, {rank}, {estimate}, {xan}, {awards}, {age}') 
     
